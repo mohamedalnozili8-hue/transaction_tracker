@@ -53,10 +53,12 @@ jobs:
       - name: تثبيت الاعتماديات
         run: flutter pub get
 
-      - name: رفع compileSdk لحزمة file_picker إلى 36 لتوافق الاعتمادية AndroidX
+      - name: توحيد compileSdk لإضافات AndroidX في إضافات Flutter
         run: |
-          find "$PUB_CACHE/hosted/pub.dev" -path '*/file_picker-*/android/build.gradle' -type f -print -exec sed -i 's/compileSdk 34/compileSdk 36/' {} +
-          grep -R -n 'compileSdk' "$PUB_CACHE/hosted/pub.dev"/file_picker-*/android/build.gradle
+          find "$PUB_CACHE/hosted/pub.dev" -path '*/android/build.gradle*' -type f -print0 | while IFS= read -r -d '' file; do
+            sed -i -E 's/compileSdkVersion[[:space:]]+[0-9]+/compileSdkVersion 36/g; s/compileSdk[[:space:]]*=[[:space:]]*[0-9]+/compileSdk = 36/g; s/compileSdk[[:space:]]+[0-9]+/compileSdk 36/g' "$file"
+          done
+          grep -R -n -E 'compileSdk(Version)?' "$PUB_CACHE/hosted/pub.dev"/*/android/build.gradle* || true
 
       - name: بناء APK (نسخة release)
         run: flutter build apk --release
