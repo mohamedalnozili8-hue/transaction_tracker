@@ -29,6 +29,9 @@ jobs:
       - name: توليد مجلد android الناقص من المستودع (flutter create يملأ الناقص فقط، لا يمس lib أو pubspec.yaml الموجودين)
         run: flutter create --platforms=android --org com.example .
 
+      - name: ضبط نسخة Android compileSdk المطلوبة للاعتماديات
+        run: sed -i 's/compileSdk = flutter.compileSdkVersion/compileSdk = 36/' android/app/build.gradle.kts
+
       - name: دمج إعدادات أندرويد المخصصة (الأذونات + مزوّد الملفات) فوق الملفات المولَّدة
         run: cp -R android_overlay/. android/
 
