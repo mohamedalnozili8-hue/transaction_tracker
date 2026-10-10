@@ -1,0 +1,53 @@
+name: Build Android APK
+
+# يعمل هذا الملف تلقائياً في كل مرة تُرفع فيها تغييرات على الفرع main،
+# أو يدوياً من تبويب Actions عبر الزر "Run workflow".
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: سحب الكود
+        uses: actions/checkout@v7
+
+      - name: تجهيز Java (مطلوب لبناء أندرويد)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: تجهيز Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: توليد مجلد android الناقص من المستودع (flutter create يملأ الناقص فقط، لا يمس lib أو pubspec.yaml الموجودين)
+        run: flutter create --platforms=android --org com.example .
+
+      - name: دمج إعدادات أندرويد المخصصة (الأذونات + مزوّد الملفات) فوق الملفات المولَّدة
+        run: cp -R android_overlay/. android/
+
+      - name: التحقق من وجود ملفي خط Cairo قبل المتابعة (لتفادي فشل غامض لاحقاً)
+        run: |
+          if [ ! -s assets/fonts/Cairo-Regular.ttf ] || [ ! -s assets/fonts/Cairo-Bold.ttf ]; then
+            echo "::error::ملفا الخط assets/fonts/Cairo-Regular.ttf و Cairo-Bold.ttf غير موجودين أو فارغين. حمّلهما من https://fonts.google.com/specimen/Cairo وارفعهما بنفس هذين الاسمين، ثم أعد تشغيل البناء."
+            exit 1
+          fi
+
+      - name: تثبيت الاعتماديات
+        run: flutter pub get
+
+      - name: بناء APK (نسخة release)
+        run: flutter build apk --release
+
+      - name: رفع ملف APK كمخرج قابل للتحميل
+        uses: actions/upload-artifact@v7
+        with:
+          name: transaction-tracker-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

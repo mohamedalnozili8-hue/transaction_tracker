@@ -1,0 +1,65 @@
+name: transaction_tracker
+description: تطبيق تتبع المعاملات الإدارية مع اكتشاف الأنماط الذكي المحلي
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # قاعدة البيانات المحلية
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  path_provider: ^2.1.3
+
+  # الصور والمرفقات
+  image_picker: ^1.1.2
+
+  # تصدير PDF
+  pdf: ^3.11.0
+  printing: ^5.13.1
+
+  # تنسيق التواريخ بالعربي
+  # ملاحظة: لا نثبّت رقم نسخة محدد لـ intl عمداً، لأن حزمة flutter_localizations
+  # (المطلوبة لدعم اللغة العربية بشكل كامل في ويدجتس Flutter) تفرض نسخة intl
+  # محددة بدقة حسب إصدار Flutter SDK المثبّت لديك. تثبيت نسخة يدوية هنا قد يسبب
+  # خطأ "version solving failed" عند flutter pub get. إن ظهر هذا الخطأ رغم ذلك،
+  # نفّذ: flutter pub add intl   (سيختار Flutter تلقائياً النسخة المتوافقة).
+  intl: any
+
+  # مشاركة الملفات (تصدير/استيراد النسخة الاحتياطية)
+  share_plus: ^9.0.0
+  file_picker: ^8.0.6
+
+  # ضغط ملفات النسخة الاحتياطية (قاعدة البيانات + الصور)
+  archive: ^3.6.1
+
+  # معرفات فريدة للمعاملات (لتفادي تعارض IDs عند الدمج)
+  uuid: ^4.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # خط Cairo العربي: مطلوب لعرض النصوص العربية في الواجهة وفي تقارير PDF.
+  # يجب تحميل ملفي الخط من Google Fonts ووضعهما هنا قبل تشغيل المشروع:
+  # https://fonts.google.com/specimen/Cairo  (حمّل Cairo-Regular.ttf و Cairo-Bold.ttf)
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+
+  assets:
+    - assets/fonts/

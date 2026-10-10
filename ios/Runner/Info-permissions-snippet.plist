@@ -1,0 +1,12 @@
+<!--
+  هذا ملف مرجعي فقط. بعد تشغيل "flutter create" (انظر README)،
+  افتح ios/Runner/Info.plist الحقيقي وأضف هذه المفاتيح داخل <dict> الرئيسي.
+-->
+<key>NSCameraUsageDescription</key>
+<string>يحتاج التطبيق إلى الكاميرا لالتقاط صور المستندات والمرفقات الخاصة بخطوات المعاملة.</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>يحتاج التطبيق إلى الوصول لمكتبة الصور لإرفاق صور المستندات بخطوات المعاملة.</string>
+
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>يحتاج التطبيق لحفظ الصور الملتقطة ضمن مكتبة الصور عند الحاجة.</string>
